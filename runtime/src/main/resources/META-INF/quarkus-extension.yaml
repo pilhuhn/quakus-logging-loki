@@ -1,0 +1,10 @@
+---
+name: "Logging Loki"
+metadata:
+  keywords:
+  - "logging"
+  - "loki"
+  categories:
+  - "core"
+  status: "preview"
+  guide: "https://quarkus.io/guides/logging-loki"
