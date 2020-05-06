@@ -40,6 +40,7 @@ public class LokiHandler extends Handler {
     HttpClient client;
     private String appLabel;
     private URI lokiUri;
+    private String environment;
 
 
     public LokiHandler(String lokiHost, Integer lokiPort) {
@@ -59,6 +60,11 @@ public class LokiHandler extends Handler {
     @Override
     public void publish(LogRecord record) {
 
+        // Skip messages that are below the configured threshold
+        if (record.getLevel().intValue() < getLevel().intValue()) {
+            return;
+        }
+
         Map<String, String> tags = new HashMap<>();
 
         String host = record instanceof ExtLogRecord ? ((ExtLogRecord) record).getHostName() : null;
@@ -70,6 +76,10 @@ public class LokiHandler extends Handler {
         }
         if (appLabel != null && !appLabel.isEmpty()) {
             tags.put("app", appLabel);
+        }
+
+        if (environment != null && !environment.isEmpty()) {
+            tags.put("env",environment);
         }
 
         if (record instanceof LokiLogRecord) {
@@ -149,5 +159,9 @@ public class LokiHandler extends Handler {
         if (label != null) {
             this.appLabel = label;
         }
+    }
+
+    public void setEnvironment(String environment) {
+        this.environment = environment;
     }
 }

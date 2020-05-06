@@ -12,12 +12,16 @@
     <packaging>pom</packaging>
 
     <properties>
-            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-            <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-            <maven.compiler.parameters>true</maven.compiler.parameters>
-            <quarkus.version>1.4.1.Final</quarkus.version>
-            <compiler-plugin.version>3.8.1</compiler-plugin.version>
-        </properties>
+      <!-- adjust to your Quarkus version -->
+      <quarkus.version>1.4.1.Final</quarkus.version>
+
+
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+      <maven.compiler.parameters>true</maven.compiler.parameters>
+
+      <compiler-plugin.version>3.8.1</compiler-plugin.version>
+    </properties>
 
     <modules>
         <module>deployment</module>

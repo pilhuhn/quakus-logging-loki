@@ -5,6 +5,6 @@ metadata:
   - "logging"
   - "loki"
   categories:
-  - "core"
-  status: "preview"
+  - "experimental"
+  status: "experimental"
   guide: "https://quarkus.io/guides/logging-loki"

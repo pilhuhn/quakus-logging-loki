@@ -1,0 +1,81 @@
+= Quarkus Logging Loki
+
+.INFO
+This is a proof of concept, do not use for production
+
+This https://quarkus.io[Quarkus extension] provides support for sending log records to a https://github.com/grafana/loki[Loki] server. Just add it to your pom, enable it in `application.properties` and you are ready to go.
+
+== Using
+
+=== Add to Pom.xml
+
+Build the extension locally (see below) and then add this to your Application's pom.xml:
+
+[source,xml]
+----
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-logging-loki</artifactId>
+      <version>919-SNAPSHOT</version>
+    </dependency>
+----
+
+=== application.properties
+
+The following is a list of properties. Only `quarkus.log.loki` is required.
+
+.application.properties
+----
+quarkus.log.loki=true             # enable logging loki
+quarkus.log.loki.host=1.2.3.4     # loki host. Default is localhost
+quarkus.log.loki.port=3100        # loki port. Default is 3100
+quarkus.log.loki.app-label=myApp  # standard label that identifies the application
+quarkus.log.loki.env=heiko        # additional 'env' label - no default
+quarkus.log.loki.level=INFO       # Minimum level to send to Loki
+----
+
+=== Structured logging
+
+LoggingLoki adds support for sending more structured log data:
+
+[source, java]
+----
+      LokiLogRecord llr =
+        new LokiLogRecord(Level.WARNING,"Got no response");  //<1>
+      llr.addTag("account",user.getAccount());  // <2>
+      log.log(llr);
+----
+<1> Create a log record with the desired level and message
+<2> Add tags (aka labels)
+
+These added tags later show up in Loki as labels, that you can query for.
+Those tags are added to the tags defined by `app-label` and `env` defined in the properties.
+
+[source,bash]
+----
+$ logcli -q --addr=http://localhost:3100 query '{account="901578"}'
+----
+
+or
+
+[source,bash]
+----
+$ logcli -q --addr=http://localhost:3100 query '{account="1234", env="test"}'
+----
+
+
+
+
+== Building
+
+Check out the source code and then in the root pom adjust the Quarkus version to your version of Quarkus.
+
+.Root pom.xml of quarkus-logging-loki
+[source,xml]
+----
+    <properties>
+      <!-- adjust to your Quarkus version -->
+      <quarkus.version>1.4.1.Final</quarkus.version>
+----
+
+Afterwards just build the extension via `mvn install`.

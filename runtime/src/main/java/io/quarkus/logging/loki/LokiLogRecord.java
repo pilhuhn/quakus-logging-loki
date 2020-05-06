@@ -30,6 +30,10 @@ public class LokiLogRecord extends ExtLogRecord {
 
     private Map<String, String> tags;
 
+    public LokiLogRecord(Level level, String msg) {
+        super(level, msg, "Bla?"); // TODO what does this loggerClassName provide?
+    }
+
     public LokiLogRecord(Level level, String msg, String loggerClassName) {
         super(level, msg, loggerClassName);
     }

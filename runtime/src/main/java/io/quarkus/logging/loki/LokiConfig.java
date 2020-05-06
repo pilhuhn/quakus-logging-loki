@@ -44,6 +44,15 @@ public class LokiConfig {
     public Optional<String> appLabel;
 
     /**
+     * Environment
+     *
+     * If present, adds a label for the environment to be able to
+     * distinguish e.g. qa/staging/prod
+     */
+    @ConfigItem(name = "env")
+    public Optional<String> environment;
+
+    /**
      * The Loki log level.
      */
     @ConfigItem(defaultValue = "WARN")

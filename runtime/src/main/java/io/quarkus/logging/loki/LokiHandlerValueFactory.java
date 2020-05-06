@@ -21,6 +21,7 @@ public class LokiHandlerValueFactory {
         LokiHandler handler = new LokiHandler(config.host.orElse("localhost"), config.port.orElse(3100));
         handler.setLevel(config.level);
         handler.setAppLabel(config.appLabel.orElse(""));
+        handler.setEnvironment(config.environment.orElse(""));
         return new RuntimeValue<>(Optional.of(handler));
     }
 }
