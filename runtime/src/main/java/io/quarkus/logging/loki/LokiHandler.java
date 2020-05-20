@@ -16,6 +16,8 @@
  */
 package io.quarkus.logging.loki;
 
+import io.quarkus.runtime.RuntimeValue;
+import io.vertx.core.Vertx;
 import io.vertx.core.json.Json;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -41,20 +43,18 @@ public class LokiHandler extends Handler {
     private String appLabel;
     private URI lokiUri;
     private String environment;
+    private RuntimeValue<Vertx> vertx;
 
 
-    public LokiHandler(String lokiHost, Integer lokiPort) {
+    public LokiHandler(URI lokiUri) {
 
-        String lokiUrl = "http://" + lokiHost + ":" + lokiPort + "/loki/api/v1/push";
-        System.out.println("Sending to loki at "  + lokiUrl);
-        lokiUri = URI.create(lokiUrl);
-
+        this.lokiUri = lokiUri;
         client = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_2)
-                .followRedirects(HttpClient.Redirect.NORMAL)
-                //          .proxy(ProxySelector.of(new InetSocketAddress(lokiHost, lokiPort)))
-                //          .authenticator(Authenticator.getDefault())
-                .build();
+            .version(HttpClient.Version.HTTP_2)
+            .followRedirects(HttpClient.Redirect.NORMAL)
+            //          .proxy(ProxySelector.of(new InetSocketAddress(lokiHost, lokiPort)))
+            //          .authenticator(Authenticator.getDefault())
+            .build();
     }
 
     @Override
@@ -102,6 +102,14 @@ public class LokiHandler extends Handler {
             }
         } else {
             msg = record.getMessage();
+        }
+
+        if (record instanceof ExtLogRecord) {
+
+            String tid = ((ExtLogRecord) record).getMdc("traceId");
+            if (tid!=null) {
+                msg = msg + ", traceId=" + tid;
+            }
         }
 
         String body = assemblePayload(msg, tags);

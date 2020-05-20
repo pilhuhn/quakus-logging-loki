@@ -21,7 +21,6 @@ class LokiProcessor {
     @Record(ExecutionTime.RUNTIME_INIT)
     LogHandlerBuildItem addLokiLogHandler(final LokiConfig lokiConfig,
             final LokiHandlerValueFactory lokiHandlerValueFactory) {
-        System.err.println("--- LokiProcessor ---");
         return new LogHandlerBuildItem(lokiHandlerValueFactory.create(lokiConfig));
     }
 
